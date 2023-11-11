@@ -1,52 +1,62 @@
-import React, { useState } from 'react';
-import { Box, FormControl, FormLabel, Input, Button } from '@chakra-ui/react';
+import {
+    Box,
+    SimpleGrid,
+    GridItem,
+    Icon,
+    Input,
+    InputGroup,
+    InputLeftAddon,
+    InputRightElement,
+} from "@chakra-ui/react";
+import {  FaUser, FaLock } from "react-icons/fa";
 
-export function Login() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-
-    const handleLogin = () => {
-        // You can add your login logic here, e.g., sending a request to the server.
-
-        // For now, let's just print the entered values to the console.
-        console.log('Username:', username);
-        console.log('Password:', password);
-    };
-
+export function Login({ colorMode }) {
     return (
         <Box
-            mx="auto"
-            mt="4"
-            p="4"
-            borderWidth="1px"
-            borderRadius="lg"
-            boxShadow="md"
-            bgColor={"grey"}
-            maxWidth={"300px"}
+            position="relative"
+            h="100vh"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            bg={colorMode === "light" ? "gray.100" : "gray.800"}
         >
-            <FormControl>
-                <FormLabel>Username</FormLabel>
-                <Input
-                    type="text"
-                    placeholder="Enter your username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-            </FormControl>
+            <Box
+                p={4}
+                bg={colorMode === "light" ? "gray.400" : "gray.600"}
+                borderRadius="lg"
+                boxShadow="md"
+                width="400px"
+                textAlign="center"
+            >
+                <SimpleGrid gap={6}>
+                    <GridItem colSpan={2}>
+                        <InputGroup variant="custom" colorScheme="purple">
+                            <InputLeftAddon>Username:</InputLeftAddon>
+                            <Input type="text" placeholder="Your Username"
+                                color={colorMode === "light" ? "gray.400" : "gray.100"}
+                            />
+                            <InputRightElement pointerEvents="none">
+                                <Icon as={FaUser} color="green.400" />
+                            </InputRightElement>
+                        </InputGroup>
+                    </GridItem>
+                    <GridItem colSpan={2}>
+                        <InputGroup variant="custom" colorScheme="purple">
+                            <InputLeftAddon>Password:</InputLeftAddon>
+                            <Input
+                                type="password"
+                                placeholder="Your Password"
+                                color={colorMode === "light" ? "gray.400" : "white.400"}
+                            />
 
-            <FormControl mt="4">
-                <FormLabel>Password</FormLabel>
-                <Input
-                    type="password"
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-            </FormControl>
-
-            <Button mt="4" colorScheme="teal" onClick={handleLogin}>
-                Login
-            </Button>
+                            <InputRightElement pointerEvents="none">
+                                <Icon as={FaLock} color="red.400" />
+                            </InputRightElement>
+                        </InputGroup>
+                    </GridItem>
+                </SimpleGrid>
+                
+            </Box>
         </Box>
     );
 }
