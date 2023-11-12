@@ -16,9 +16,11 @@ import {
 
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { toast } from "react-toastify";
 import { FaUser, FaLock } from "react-icons/fa";
 import { getAllData, getUserByName } from '../repo/repo';
 import { Link } from "react-router-dom";
+import md5 from 'md5';
 
 export function Login({ colorMode }: { colorMode: string }) {
     const [username, setUsername] = useState<string | null>("");
@@ -29,15 +31,34 @@ export function Login({ colorMode }: { colorMode: string }) {
 
 
     async function verify() {
+        if (!username || !password) {
+            console.log("Username and password are required.");
+            toast.error("Username and password are required", {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 5000,
+            });
+            return;
+        }
         try {
-            const allUsers = await getUserByName(username);
-            console.log(allUsers);
+            const userByName = await getUserByName(username);
+
+            if (!userByName) {
+                console.log("This user doesnt exist");
+                toast.error("This user doesnt exist", {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 5000,
+                });
+            } else {
+                const hashedPassword: string = md5(password);
+
+                console.log('Hashed Password:', hashedPassword);
+            }
         } catch (error) {
             console.error('Error fetching data:', error);
         }
     }
 
-      
+
 
     return (
         <Box
