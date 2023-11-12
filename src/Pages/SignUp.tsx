@@ -17,10 +17,10 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { FaUser, FaLock } from "react-icons/fa";
-import { getAllData, getUserByName } from '../repo/repo';
+import { getUserByName } from '../repo/repo';
 import { Link } from "react-router-dom";
 
-export function Login({ colorMode }: { colorMode: string }) {
+export function SignUp({ colorMode }: { colorMode: string }) {
     const [username, setUsername] = useState<string | null>("");
     const [password, setPassword] = useState<string | null>("");
 
@@ -28,15 +28,15 @@ export function Login({ colorMode }: { colorMode: string }) {
     if (username == "1") return
 
 
-    async function verify() {
-        try {
-            const allUsers = await getUserByName(username);
-            console.log(allUsers);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    }
-
+          async function verify() {
+            try {
+              const allUsers = await getUserByName(username);
+              console.log(allUsers);
+            } catch (error) {
+              console.error('Error fetching data:', error);
+            }
+          }
+          
 
     return (
         <Box
@@ -56,7 +56,7 @@ export function Login({ colorMode }: { colorMode: string }) {
                 textAlign="center"
             >
                 <Heading as="h2" size="xl" marginBottom="10" mt={2}>
-                    Login to your Account
+                    Create a new Account
                 </Heading>
                 <SimpleGrid gap={6}>
 
@@ -99,12 +99,12 @@ export function Login({ colorMode }: { colorMode: string }) {
                     onClick={verify}
                     disabled={!username || !password}
                 >
-                    Login
+                    Sign Up
                 </Button>
                 <br />
                 <ChakraLink
                     as={Link}
-                    to="/signup"
+                    to="/login"
                     color={colorMode === "light" ? "black" : "gray.100"}
                     fontWeight="bold"
                     fontSize="18px"

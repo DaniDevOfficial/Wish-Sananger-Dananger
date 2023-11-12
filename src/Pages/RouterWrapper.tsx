@@ -5,6 +5,7 @@ import {
     useColorMode,
 } from "@chakra-ui/react";
 import { FaMoon, FaSun } from "react-icons/fa"
+import { SignUp } from "./SignUp";
 export function RouterWrapper() {
     const { toggleColorMode, colorMode } = useColorMode();
 
@@ -13,6 +14,8 @@ export function RouterWrapper() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<Login colorMode={colorMode} />} />
+                    <Route path="/login" element={<Login colorMode={colorMode} />} />
+                    <Route path="/signup" element={<SignUp colorMode={colorMode} />} />
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes >
             </BrowserRouter >
