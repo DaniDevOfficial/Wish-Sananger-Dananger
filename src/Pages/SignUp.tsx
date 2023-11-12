@@ -15,10 +15,12 @@ import {
     Text,
 
 } from "@chakra-ui/react";
+import { toast } from "react-toastify";
 import { useState } from "react";
 import { FaUser, FaLock } from "react-icons/fa";
 import { getUserByName } from '../repo/repo';
 import { Link } from "react-router-dom";
+import md5 from 'md5';
 
 export function SignUp({ colorMode }: { colorMode: string }) {
     const [username, setUsername] = useState<string | null>("");
@@ -28,15 +30,35 @@ export function SignUp({ colorMode }: { colorMode: string }) {
     if (username == "1") return
 
 
-          async function verify() {
-            try {
-              const allUsers = await getUserByName(username);
-              console.log(allUsers);
-            } catch (error) {
-              console.error('Error fetching data:', error);
+    async function verify() {
+        if (!username || !password) {
+            console.log("Username and password are required.");
+            toast.error("Username and password are required", {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 5000,
+            });
+            return;
+        }
+        try {
+            const userByName = await getUserByName(username);
+
+            if (userByName) {
+                console.log("A user with this name already exists");
+                toast.error("A user with this name already exists", {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 5000,
+                });
+            } else {
+                const hashedPassword: string = md5(password);
+
+                console.log('Hashed Password:', hashedPassword);
             }
-          }
-          
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+
 
     return (
         <Box
