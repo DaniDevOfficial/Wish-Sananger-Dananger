@@ -24,7 +24,7 @@ const baseStyle = definePartsStyle({
   },
 })
 
-const variantOutline = definePartsStyle((props) => {
+const variantOutline = definePartsStyle(() => {
   return {
     field: {
       fontFamily: "mono", // change font family to mono
@@ -32,7 +32,7 @@ const variantOutline = definePartsStyle((props) => {
   }
 })
 
-const variantFilled = definePartsStyle((props) => {
+const variantFilled = definePartsStyle(() => {
   return {
     field: {
       fontWeight: "semibold", // change font weight to semibold

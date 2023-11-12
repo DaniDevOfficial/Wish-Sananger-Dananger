@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
     Box,
     SimpleGrid,
@@ -10,26 +11,42 @@ import {
     Heading,
     FormControl,
     Button,
+    useRangeSlider,
 
 
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { FaUser, FaLock } from "react-icons/fa";
-type State = {
-    username: string | null;
-    password: string | null;
-};
+import { getAllData, getUserByName } from '../repo/repo';
+
 export function Login({ colorMode }: { colorMode: string }) {
     const [username, setUsername] = useState<string | null>("");
     const [password, setPassword] = useState<string | null>("");
 
-    const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setUsername(event.target.value);
-    };
+    if (password == "1") return
+    if (username == "1") return
+    const userName = 'john';
 
-    const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPassword(event.target.value);
-    };
+        async function fetchDataAndLog() {
+            try {
+              const allUsers = await getAllData('users');
+              console.log(allUsers);
+            } catch (error) {
+              console.error('Error fetching data:', error);
+            }
+          }
+          
+          fetchDataAndLog();
+          async function fetchSinglAndLog() {
+            try {
+              const allUsers = await getUserByName("john");
+              console.log(allUsers);
+            } catch (error) {
+              console.error('Error fetching data:', error);
+            }
+          }
+          
+          fetchSinglAndLog();
     return (
         <Box
             position="relative"
@@ -58,8 +75,7 @@ export function Login({ colorMode }: { colorMode: string }) {
                                 <InputLeftAddon>Username:</InputLeftAddon>
                                 <Input type="text" placeholder="Your Username"
                                     color={colorMode === "light" ? "black" : "gray.100"}
-                                    value={username}
-                                    onChange={handleUsernameChange}
+                                    onChange={(e) => setUsername(e.target.value)}
 
                                 />
                                 <InputRightElement pointerEvents="none">
@@ -77,7 +93,7 @@ export function Login({ colorMode }: { colorMode: string }) {
                                     type="password"
                                     placeholder="Your Password"
                                     color={colorMode === "light" ? "black" : "white.400"}
-                                    onChange={handlePasswordChange}
+                                    onChange={(e) => setPassword(e.target.value)}
                                 />
                                 <InputRightElement pointerEvents="none">
                                     <Icon as={FaLock} color="red.400" />
@@ -86,13 +102,13 @@ export function Login({ colorMode }: { colorMode: string }) {
                         </FormControl>
                     </GridItem>
                 </SimpleGrid>
-                <Button 
-                colorScheme='purple'
-                marginTop="4"
+                <Button
+                    colorScheme='purple'
+                    marginTop="4"
                 >
                     Login
-                    </Button>
-                            </Box>
+                </Button>
+            </Box>
         </Box>
     );
 }

@@ -1,0 +1,25 @@
+{
+    "users": [
+      {
+        "username": "john",
+        "password": "password1"
+      },
+      {
+        "username": "jane_doe",
+        "password": "qwerty123"
+      },
+      {
+        "username": "superuser",
+        "password": "admin1234"
+      },
+      {
+        "username": "coding_guru",
+        "password": "securePass!"
+      },
+      {
+        "username": "tech_geek",
+        "password": "P@$$w0rd"
+      }
+    ]
+  }
+  
