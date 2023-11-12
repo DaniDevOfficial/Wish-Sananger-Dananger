@@ -25,7 +25,6 @@ export function Login({ colorMode }: { colorMode: string }) {
 
     if (password == "1") return
     if (username == "1") return
-    const userName = 'john';
 
         async function fetchDataAndLog() {
             try {
@@ -37,16 +36,16 @@ export function Login({ colorMode }: { colorMode: string }) {
           }
           
           fetchDataAndLog();
-          async function fetchSinglAndLog() {
+          async function verify() {
             try {
-              const allUsers = await getUserByName("john");
+              const allUsers = await getUserByName(username);
               console.log(allUsers);
             } catch (error) {
               console.error('Error fetching data:', error);
             }
           }
           
-          fetchSinglAndLog();
+
     return (
         <Box
             position="relative"
@@ -105,6 +104,7 @@ export function Login({ colorMode }: { colorMode: string }) {
                 <Button
                     colorScheme='purple'
                     marginTop="4"
+                    onClick={verify}
                 >
                     Login
                 </Button>
