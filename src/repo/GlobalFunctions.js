@@ -1,17 +1,17 @@
 
 import { hash } from 'bcrypt';
 
-// Set a constant salt (not recommended for security)
-const saltRounds = 0; // You can adjust the number of rounds
+const saltRounds = 0;
 
-// Your password
-const password = 'your_password';
 
-// Hash the password without salt
+export function hashingWithBcrypt(password) {
 hash(password, saltRounds, (err, hashedPassword) => {
   if (err) {
     console.error('Error hashing password:', err);
   } else {
     console.log('Hashed Password (without salt):', hashedPassword);
+    return(hashedPassword)
   }
-});
+})
+}
+hashingWithBcrypt('12345678')

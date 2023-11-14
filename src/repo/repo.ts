@@ -1,5 +1,6 @@
 import { ref, get } from 'firebase/database';
 import { database } from '../firebase';
+import { User } from '../types';
 
 
 export async function getAllData(path: string) {
@@ -14,17 +15,18 @@ export async function getAllData(path: string) {
   }
 }
 export async function getUserByName(usernameToFind: string) {
-    const dataRef = ref(database, 'users'); // Always use the path "users"
+    const dataRef = ref(database, 'users');
   
     try {
       const snapshot = await get(dataRef);
       const data = snapshot.val();
   
+
       if (data && typeof data === 'object') {
-        const usersArray = Object.values(data);
-  
-        const user = usersArray.find((user) => user.username === usernameToFind);
-  
+        const usersArray: { username: string }[] = Object.values(data);
+
+        const user: User | undefined = usersArray.find((user) => user.username === usernameToFind);
+
         if (user) {
           return user;
         } else {
