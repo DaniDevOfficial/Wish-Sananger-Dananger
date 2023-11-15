@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/bcryptjs": "^2.4.6",
     "@types/md5": "^2.3.5",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",

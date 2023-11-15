@@ -21,18 +21,17 @@ import { useState } from "react";
 import { FaUser, FaLock } from "react-icons/fa";
 import { getUserByName } from '../repo/repo';
 import { Link } from "react-router-dom";
-import md5 from 'md5';
 import { ref, push, set } from 'firebase/database';
 import { database } from '../firebase'; 
-import { hash } from "bcrypt";
-// import { hashPasswordBcrypt } from './../repo/GlobalFunctions';
+
+import { hashPasswordBcrypt } from '../repo/GlobalFunctions';
 
 export function SignUp({ colorMode }: { colorMode: string }) {
     const [username, setUsername] = useState<string | null>("");
     const [password, setPassword] = useState<string | null>("");
 
-
-
+    hashPasswordBcrypt("password");
+    console.log("password", hashPasswordBcrypt("password"));    
     async function verify() {
         if (!username || !password) {
             console.log("Username and password are required.");
@@ -81,7 +80,7 @@ export function SignUp({ colorMode }: { colorMode: string }) {
     }
 
 
-    const bg = useColorModeValue('red.500', 'white')
+    const bg = useColorModeValue('black', 'white')
     return (
         <Box
             position="relative"
