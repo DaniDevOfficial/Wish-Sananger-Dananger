@@ -21,6 +21,7 @@ import { FaUser, FaLock } from "react-icons/fa";
 import { getAllData, getUserByName } from '../repo/repo';
 import { Link } from "react-router-dom";
 import md5 from 'md5';
+import { checkPassword } from "../repo/GlobalFunctions";
 
 export function Login({ colorMode }: { colorMode: string }) {
     const [username, setUsername] = useState<string | null>("");
@@ -47,11 +48,8 @@ export function Login({ colorMode }: { colorMode: string }) {
                     autoClose: 5000,
                 });
             } else {
-                const hashedPassword: string = md5(password);
-                console.log("password", userByName.hashedPassword);
-                if(password !== userByName.hashedPassword) return toast.error("Wrong password")
+                if(!checkPassword(password, userByName.hashedPassword)) return toast.error("Wrong password")
                 toast.success("Loged in")
-                console.log('Hashed Password:', hashedPassword);
             }
         } catch (error) {
             console.error('Error fetching data:', error);
