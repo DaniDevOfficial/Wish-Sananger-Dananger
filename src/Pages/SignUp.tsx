@@ -24,6 +24,8 @@ import { Link } from "react-router-dom";
 import md5 from 'md5';
 import { ref, push, set } from 'firebase/database';
 import { database } from '../firebase'; 
+import { hash } from "bcrypt";
+// import { hashPasswordBcrypt } from './../repo/GlobalFunctions';
 
 export function SignUp({ colorMode }: { colorMode: string }) {
     const [username, setUsername] = useState<string | null>("");
@@ -39,6 +41,7 @@ export function SignUp({ colorMode }: { colorMode: string }) {
                 autoClose: 5000,
             });
             return;
+        
         }
 
         try {
@@ -58,9 +61,13 @@ export function SignUp({ colorMode }: { colorMode: string }) {
                 const usersRef = ref(database, 'users');
                 const newUserRef = push(usersRef);
 
+               // hashPasswordBcrypt(password);
+
+                const hashedPassword = "password"
+
                 const userData = {
                     username: username,
-                    hashedPassword: password,
+                    hashedPassword: hashedPassword,
                     userId: newUserRef.key, 
                 };
 
