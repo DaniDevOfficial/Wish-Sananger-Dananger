@@ -50,7 +50,9 @@ export function Login({ colorMode }: { colorMode: string }) {
                 });
             } else {
                 const hashedPassword: string = md5(password);
-
+                console.log("password", userByName.hashedPassword);
+                if(password !== userByName.hashedPassword) return toast.error("Wrong password")
+                toast.success("Loged in")
                 console.log('Hashed Password:', hashedPassword);
             }
         } catch (error) {

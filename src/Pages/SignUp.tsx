@@ -13,6 +13,7 @@ import {
     Button,
     Link as ChakraLink,
     Text,
+    useColorModeValue,
 
 } from "@chakra-ui/react";
 import { toast } from "react-toastify";
@@ -21,6 +22,8 @@ import { FaUser, FaLock } from "react-icons/fa";
 import { getUserByName } from '../repo/repo';
 import { Link } from "react-router-dom";
 import md5 from 'md5';
+import { ref, push, set } from 'firebase/database';
+import { database } from '../firebase'; 
 
 export function SignUp({ colorMode }: { colorMode: string }) {
     const [username, setUsername] = useState<string | null>("");
@@ -39,6 +42,7 @@ export function SignUp({ colorMode }: { colorMode: string }) {
             });
             return;
         }
+
         try {
             const userByName = await getUserByName(username);
 
@@ -49,9 +53,22 @@ export function SignUp({ colorMode }: { colorMode: string }) {
                     autoClose: 5000,
                 });
             } else {
-                const hashedPassword: string = md5(password);
+                toast.success("Username is available", {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 5000,
+                });
+                const usersRef = ref(database, 'users');
+                const newUserRef = push(usersRef);
 
-                console.log('Hashed Password:', hashedPassword);
+                const userData = {
+                    username: username,
+                    hashedPassword: password,
+                    userId: newUserRef.key, 
+                };
+
+                set(newUserRef, userData);
+                toast.success("User data uploaded to Firebase with a unique ID.")         
+                console.log('User data uploaded to Firebase with a unique ID.');
             }
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -59,7 +76,7 @@ export function SignUp({ colorMode }: { colorMode: string }) {
     }
 
 
-
+    const bg = useColorModeValue('red.500', 'white')
     return (
         <Box
             position="relative"
@@ -127,7 +144,7 @@ export function SignUp({ colorMode }: { colorMode: string }) {
                 <ChakraLink
                     as={Link}
                     to="/login"
-                    color={colorMode === "light" ? "black" : "gray.100"}
+                    color={bg}
                     fontWeight="bold"
                     fontSize="18px"
                     _hover={{ textDecor: "underline" }}>
