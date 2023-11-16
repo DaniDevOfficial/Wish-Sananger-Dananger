@@ -42,3 +42,34 @@ export async function getUserByName(usernameToFind: string) {
       throw error;
     }
   }
+
+  export async function getPasswordsWithUserID(userID: string){
+    const dataRef = ref(database, "/passwords");
+    try {
+      const snapshot = await get(dataRef);
+      const data = snapshot.val();
+  
+
+      if (data && typeof data === 'object') {
+        const passwordArray: { userID: string }[] = Object.values(data);
+
+        const user: User | undefined = passwordArray.find((passwords) => passwords.userID === userID);
+
+        if (user) {
+          return user;
+        } else {
+          console.error('User not found');
+          return null;
+        }
+      } else {
+        console.error('Invalid data format');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
+
+
+
+  }
