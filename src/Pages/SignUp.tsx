@@ -51,10 +51,7 @@ export function SignUp({ colorMode }: { colorMode: string }) {
                     autoClose: 5000,
                 });
             } else {
-                toast.success("Username is available", {
-                    position: toast.POSITION.TOP_RIGHT,
-                    autoClose: 5000,
-                });
+                
                 const usersRef = ref(database, 'users');
                 const newUserRef = push(usersRef);
 
@@ -69,8 +66,11 @@ export function SignUp({ colorMode }: { colorMode: string }) {
                 };
 
                 set(newUserRef, userData);
-                toast.success("User data uploaded to Firebase with a unique ID.")
-                console.log('User data uploaded to Firebase with a unique ID.');
+                localStorage.setItem('userId', userByName.id);
+                localStorage.setItem('username', userByName.username);
+
+                toast.success("Sign Up successful")
+                console.log('Sign Up successful');
             }
         } catch (error) {
             console.error('Error fetching data:', error);

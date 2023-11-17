@@ -18,16 +18,15 @@ import {
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { FaUser, FaLock } from "react-icons/fa";
-import { getAllData, getUserByName } from '../repo/repo';
-import { Link } from "react-router-dom";
-import md5 from 'md5';
+import { getUserByName } from '../repo/repo';
+import { Link, useNavigate  } from "react-router-dom";
 import { checkPassword } from "../repo/GlobalFunctions";
 
 export function Login({ colorMode }: { colorMode: string }) {
     const [username, setUsername] = useState<string | null>("");
     const [password, setPassword] = useState<string | null>("");
 
-
+    let navigate = useNavigate();
 
     async function verify() {
         if (!username || !password) {
@@ -38,24 +37,38 @@ export function Login({ colorMode }: { colorMode: string }) {
             });
             return;
         }
+
         try {
             const userByName = await getUserByName(username);
 
             if (!userByName) {
-                console.log("This user doesnt exist");
-                toast.error("This user doesnt exist", {
+                console.log("Invalid username or password");
+                toast.error("Invalid username or password", {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 5000,
                 });
             } else {
-                if(!checkPassword(password, userByName.hashedPassword)) return toast.error("Wrong password")
-                toast.success("Loged in")
+                if (!await checkPassword(password, userByName.hashedPassword)) {
+                    console.log("Invalid username or password");
+                    toast.error("Invalid username or password", {
+                        position: toast.POSITION.TOP_RIGHT,
+                        autoClose: 5000,
+                    });
+                } else {
+                    localStorage.setItem('userId', userByName.id);
+                    localStorage.setItem('username', userByName.username);
+
+
+                    console.log("Logged in");
+                    toast.success("Logged in");
+                    navigate('dashboard');
+
+                }
             }
         } catch (error) {
             console.error('Error fetching data:', error);
         }
     }
-
 
 
     return (
