@@ -7,6 +7,7 @@ import {
 import { FaMoon, FaSun } from "react-icons/fa"
 import { SignUp } from "./SignUp";
 import { Dashboard } from "./Dashboard";
+import { CreatePassword } from "./CreatePassword";
 export function RouterWrapper() {
     const { toggleColorMode, colorMode } = useColorMode();
 
@@ -18,6 +19,7 @@ export function RouterWrapper() {
                     <Route path="/login" element={<Login colorMode={colorMode} />} />
                     <Route path="/signup" element={<SignUp colorMode={colorMode} />} />
                     <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/idk" element={<CreatePassword />} />
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes >
             </BrowserRouter >
