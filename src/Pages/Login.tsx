@@ -26,7 +26,7 @@ export function Login({ colorMode }: { colorMode: string }) {
     const [username, setUsername] = useState<string | null>("");
     const [password, setPassword] = useState<string | null>("");
 
-    let navigate = useNavigate();
+    const navigate = useNavigate();
 
     async function verify() {
         if (!username || !password) {
