@@ -55,13 +55,16 @@ export function Login({ colorMode }: { colorMode: string }) {
                         autoClose: 5000,
                     });
                 } else {
-                    localStorage.setItem('userId', userByName.id);
-                    localStorage.setItem('username', userByName.username);
+                    sessionStorage.setItem('userID', userByName.userID);
+                    sessionStorage.setItem('username', userByName.username);
+                    sessionStorage.setItem('masterPassword', password);
+                    console.log(sessionStorage.getItem("userID"))
 
-
+                    
+                    
                     console.log("Logged in");
                     toast.success("Logged in");
-                    navigate('dashboard');
+                    navigate('/dashboard');
 
                 }
             }

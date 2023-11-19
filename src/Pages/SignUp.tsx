@@ -23,12 +23,13 @@ import { getUserByName } from '../repo/repo';
 import { Link } from "react-router-dom";
 import { ref, push, set } from 'firebase/database';
 import { database } from '../firebase';
-
+import { useNavigate } from "react-router-dom"
 import { hashPasswordBcrypt } from '../repo/GlobalFunctions';
 
 export function SignUp({ colorMode }: { colorMode: string }) {
     const [username, setUsername] = useState<string | null>("");
     const [password, setPassword] = useState<string | null>("");
+    const navigate = useNavigate();
 
     async function verify() {
         if (!username || !password) {
@@ -51,26 +52,29 @@ export function SignUp({ colorMode }: { colorMode: string }) {
                     autoClose: 5000,
                 });
             } else {
-                
+
                 const usersRef = ref(database, 'users');
                 const newUserRef = push(usersRef);
 
 
                 const hashedPassword = hashPasswordBcrypt(password);
-
+                const userID = newUserRef.key
                 const userData = {
                     username: username,
                     hashedPassword: hashedPassword,
                     password: password,
-                    userId: newUserRef.key,
+                    userID: userID,
                 };
-
-                set(newUserRef, userData);
-                localStorage.setItem('userId', userByName.id);
-                localStorage.setItem('username', userByName.username);
-
                 toast.success("Sign Up successful")
                 console.log('Sign Up successful');
+                sessionStorage.setItem('userID', userID);
+                sessionStorage.setItem('username', username);
+                sessionStorage.setItem('masterPassword', password);
+                set(newUserRef, userData);
+                navigate('/dashboard');
+
+
+
             }
         } catch (error) {
             console.error('Error fetching data:', error);

@@ -40,8 +40,7 @@ export function CreatePassword() {
         }
 
         try {
-                const creatorID = sessionStorage.getItem("userID")
-                console.log(creatorID)
+            
                 const passwordRef = ref(database, 'passwords');
                 const newPasswordRef = push(passwordRef);
 
@@ -52,7 +51,7 @@ export function CreatePassword() {
                     password: password,
                     name: name,
                     passwordID: newPasswordRef.key,
-                    creatorID: creatorID
+                    creatorID: "Doing later"
                 };
 
                 set(newPasswordRef, passwordData);
@@ -78,7 +77,7 @@ export function CreatePassword() {
                         <Flex direction="column" justify="space-between" h="100%" w="80%">
 
                             <Slide in={isOpen} direction="right">
-                                <DrawerHeader textAlign="center">Create Password</DrawerHeader>
+                                <DrawerHeader textAlign="center">Edit Password</DrawerHeader>
 
                                 <FormControl marginLeft="2vw" mb={4}>
                                     <FormLabel>Website</FormLabel>

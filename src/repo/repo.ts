@@ -26,11 +26,11 @@ export async function getUserByName(usernameToFind: string) {
         const usersArray: { username: string }[] = Object.values(data);
 
         const user: User | undefined = usersArray.find((user) => user.username === usernameToFind);
-
+        console.log(user)
         if (user) {
           return user;
         } else {
-          console.error('User not found');
+          // user doesnt exist (no console log for safety)
           return null;
         }
       } else {
@@ -58,7 +58,7 @@ export async function getUserByName(usernameToFind: string) {
         if (user) {
           return user;
         } else {
-          console.error('User not found');
+          // user doesnt exist (no console log for safety)
           return null;
         }
       } else {
@@ -69,7 +69,33 @@ export async function getUserByName(usernameToFind: string) {
       console.error('Error fetching data:', error);
       throw error;
     }
+  }
 
+  
+  export async function getPasswordByID(passwordID: string){
+    const dataRef = ref(database, "/passwords");
+    try {
+      const snapshot = await get(dataRef);
+      const data = snapshot.val();
+  
 
+      if (data && typeof data === 'object') {
+        const passwordArray: { passwordID: string }[] = Object.values(data);
 
+        const user: User | undefined = passwordArray.find((passwords) => passwords.passwordID === passwordID);
+
+        if (user) {
+          return user;
+        } else {
+          // user doesnt exist (no console log for safety)
+          return null;
+        }
+      } else {
+        console.error('Invalid data format');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
   }
