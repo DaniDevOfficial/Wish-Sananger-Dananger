@@ -11,15 +11,13 @@ import {
     DrawerCloseButton,
     DrawerHeader,
     DrawerBody,
-    useDisclosure,
     Button,
 } from '@chakra-ui/react';
 import { toast } from 'react-toastify';
 import { push, ref, set } from 'firebase/database';
 import { database } from '../firebase';
 
-export function CreatePassword() {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+export function CreatePassword({ isOpen, onOpen, onClose }) {
 
     const [website, setWebsite] = useState('');
     const [username, setUsername] = useState('');
@@ -40,34 +38,37 @@ export function CreatePassword() {
         }
 
         try {
-                const creatorID = sessionStorage.getItem("userID")
-                console.log(creatorID)
-                const passwordRef = ref(database, 'passwords');
-                const newPasswordRef = push(passwordRef);
+            const creatorID = sessionStorage.getItem("userID")
+            console.log(creatorID)
+            const passwordRef = ref(database, 'passwords');
+            const newPasswordRef = push(passwordRef);
 
-                const passwordData = {
-                    website: website,
-                    username: username,
-                    email: email,
-                    password: password,
-                    name: name,
-                    passwordID: newPasswordRef.key,
-                    creatorID: creatorID
-                };
+            const passwordData = {
+                website: website,
+                username: username,
+                email: email,
+                password: password,
+                name: name,
+                passwordID: newPasswordRef.key,
+                creatorID: creatorID
+            };
 
-                set(newPasswordRef, passwordData);
-
-                toast.success("Created new Password")
-                console.log('Created new Password');
-            }
-         catch (error) {
+            set(newPasswordRef, passwordData);
+            setWebsite("");
+            setUsername("");
+            setEmail("");
+            setPassword("");
+            setName("");
+            toast.success("Created new Password")
+            console.log('Created new Password');
+        }
+        catch (error) {
             console.error('Error Saving Password:', error);
         }
         onClose();
     }
     return (
         <>
-            <Button onClick={onOpen}>Open CreatePassword</Button>
 
             <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
                 <DrawerOverlay />
