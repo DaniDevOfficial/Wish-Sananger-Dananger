@@ -17,7 +17,7 @@ import { toast } from 'react-toastify';
 import { push, ref, set } from 'firebase/database';
 import { database } from '../firebase';
 
-export function CreatePassword({ isOpen, onOpen, onClose }) {
+export function CreatePassword({ isOpen, onOpen, onClose, onCreatePassword }) {
 
     const [website, setWebsite] = useState('');
     const [username, setUsername] = useState('');
@@ -61,6 +61,8 @@ export function CreatePassword({ isOpen, onOpen, onClose }) {
             setName("");
             toast.success("Created new Password")
             console.log('Created new Password');
+            onCreatePassword();
+
         }
         catch (error) {
             console.error('Error Saving Password:', error);
