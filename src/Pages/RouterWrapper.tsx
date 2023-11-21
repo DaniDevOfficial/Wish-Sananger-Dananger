@@ -18,7 +18,7 @@ export function RouterWrapper() {
                     <Route path="/" element={<Login colorMode={colorMode} />} />
                     <Route path="/login" element={<Login colorMode={colorMode} />} />
                     <Route path="/signup" element={<SignUp colorMode={colorMode} />} />
-                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/dashboard" element={<Dashboard colorMode={colorMode}/>} />
                     <Route path="/idk" element={<CreatePassword />} />
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes >

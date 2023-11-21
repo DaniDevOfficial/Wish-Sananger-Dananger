@@ -1,65 +1,100 @@
+// Dashboard.jsx
+
 import React, { useEffect, useState } from 'react';
-import { Button, useDisclosure, Box, Text, HStack, VStack } from '@chakra-ui/react';
+import { Button, useDisclosure, Box, Text, VStack } from '@chakra-ui/react';
 import { CreatePassword } from './CreatePassword';
 import { getPasswordsWithCreatorID } from '../repo/repo';
 
-export function Dashboard() {
+export function Dashboard({ colorMode }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [passwords, setPasswords] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [selectedPassword, setSelectedPassword] = useState(null);
 
     const userID = sessionStorage.getItem('userID');
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const userPasswords = await getPasswordsWithCreatorID(userID);
-                setPasswords(userPasswords);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                setError(error);
-            } finally {
-                setLoading(false);
-            }
-        };
+    async function fetchPasswords() {
+        try {
+            const userPasswords = await getPasswordsWithCreatorID(userID);
+            setPasswords(userPasswords);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            setError(error);
+        } finally {
+            setLoading(false);
+        }
+    }
 
-        fetchData();
+    useEffect(() => {
+        fetchPasswords();
     }, [userID]);
 
-    if (loading) {
-        return <p>Loading...</p>;
-    }
+    const handleCreatePassword = (password) => {
+        // Handle the creation or editing logic here
+        // You can check if `selectedPassword` is not null to determine if it's an edit
+        if (selectedPassword) {
+            // Handle edit logic
+            console.log('Editing password:', password);
+        } else {
+            // Handle create logic
+            console.log('Creating password:', password);
+        }
 
-    if (error) {
-        return <p>Error: {error}</p>;
-    }
-    const handleCreatePassword = async () => {
-        await fetchData();
+        // Close the modal
+        onClose();
+        // Refresh the passwords
+        fetchPasswords();
     };
-    const renderFieldVStack = (label, value, fontSize = 'md', fontWeight = 'normal') => (
-        <VStack align="start" spacing={1} color="gray.500">
-            <Text fontSize="lg" fontWeight="bold">{label}:</Text>
-            <Text fontSize={fontSize} fontWeight={fontWeight}>{value || 'N/A'}</Text>
-        </VStack>
-    );
+
+    const handleEditPassword = (password) => {
+        // Set the selected password for editing
+        setSelectedPassword(password);
+        // Open the modal for editing
+        onOpen();
+    };
+
+    const handleCreateNewPassword = () => {
+        // Set the selected password to null to indicate it's a new password
+        setSelectedPassword(null);
+        // Open the modal for creating a new password
+        onOpen();
+    };
 
     return (
         <>
-            <Button onClick={onOpen}>Open CreatePassword</Button>
-            <CreatePassword isOpen={isOpen} onOpen={onOpen} onClose={onClose} onCreatePassword={handleCreatePassword} />
+            <Button onClick={handleCreateNewPassword}>Create New Password</Button>
+            <CreatePassword
+                isOpen={isOpen}
+                onOpen={onOpen}
+                onClose={onClose}
+                onCreatePassword={handleCreatePassword}
+                selectedPassword={selectedPassword}
+            />
 
             {passwords.map((password) => (
-                <Box key={password.passwordID} bg="white" p={4} borderRadius="md" boxShadow="md" mb={4}>
-                    {password.name}
-                    <HStack spacing={4}>
-                        {renderFieldVStack('Email', password.email)}
-                        {renderFieldVStack('Username', password.username)}
-                        {renderFieldVStack('Password', password.password)}
-                        {renderFieldVStack('Website', password.website, 'sm', 'bold')}
-
-                        {/* Add more fields as needed */}
-                    </HStack>
+                <Box
+                    key={password.passwordID}
+                    bg={colorMode === 'light' ? 'gray.200' : 'gray.600'}
+                    p={4}
+                    borderRadius="md"
+                    boxShadow="md"
+                    mb={4}
+                    onClick={() => handleEditPassword(password)} // Handle click to edit
+                >
+                    <Text fontSize="xl" fontWeight="bold">
+                        {password.name}
+                    </Text>
+                    {password.email && (
+                        <Text fontSize="md" fontWeight="normal">
+                            Email: {password.email}
+                        </Text>
+                    )}
+                    {!password.email && password.username && (
+                        <Text fontSize="md" fontWeight="normal">
+                            Username: {password.username}
+                        </Text>
+                    )}
                 </Box>
             ))}
         </>
