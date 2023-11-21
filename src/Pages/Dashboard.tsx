@@ -31,38 +31,28 @@ export function Dashboard({ colorMode }) {
     }, [userID]);
 
     const handleCreatePassword = (password) => {
-        // Handle the creation or editing logic here
-        // You can check if `selectedPassword` is not null to determine if it's an edit
         if (selectedPassword) {
-            // Handle edit logic
             console.log('Editing password:', password);
         } else {
-            // Handle create logic
             console.log('Creating password:', password);
         }
 
-        // Close the modal
         onClose();
-        // Refresh the passwords
         fetchPasswords();
     };
 
     const handleEditPassword = (password) => {
-        // Set the selected password for editing
         setSelectedPassword(password);
-        // Open the modal for editing
         onOpen();
     };
 
     const handleCreateNewPassword = () => {
-        // Set the selected password to null to indicate it's a new password
         setSelectedPassword(null);
-        // Open the modal for creating a new password
         onOpen();
     };
 
     return (
-        <>
+        <VStack align="stretch" spacing={4} p={4}>
             <Button onClick={handleCreateNewPassword}>Create New Password</Button>
             <CreatePassword
                 isOpen={isOpen}
@@ -80,7 +70,7 @@ export function Dashboard({ colorMode }) {
                     borderRadius="md"
                     boxShadow="md"
                     mb={4}
-                    onClick={() => handleEditPassword(password)} // Handle click to edit
+                    onClick={() => handleEditPassword(password)}
                 >
                     <Text fontSize="xl" fontWeight="bold">
                         {password.name}
@@ -97,6 +87,6 @@ export function Dashboard({ colorMode }) {
                     )}
                 </Box>
             ))}
-        </>
+        </VStack>
     );
 }

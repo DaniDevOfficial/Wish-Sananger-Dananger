@@ -14,10 +14,14 @@ import {
     DrawerHeader,
     DrawerBody,
     Button,
+    InputGroup,
+    IconButton,
+    InputRightElement,
 } from '@chakra-ui/react';
 import { toast } from 'react-toastify';
 import { ref, set, push } from 'firebase/database';
 import { database } from '../firebase';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 export function CreatePassword({ isOpen, onOpen, onClose, onCreatePassword, selectedPassword }) {
     const [website, setWebsite] = useState('');
@@ -25,9 +29,9 @@ export function CreatePassword({ isOpen, onOpen, onClose, onCreatePassword, sele
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
-        // Update the form fields when selectedPassword changes
         if (selectedPassword) {
             setWebsite(selectedPassword.website || '');
             setUsername(selectedPassword.username || '');
@@ -35,7 +39,6 @@ export function CreatePassword({ isOpen, onOpen, onClose, onCreatePassword, sele
             setPassword(selectedPassword.password || '');
             setName(selectedPassword.name || '');
         } else {
-            // Clear form fields if no selectedPassword (creating new password)
             setWebsite('');
             setUsername('');
             setEmail('');
@@ -58,14 +61,11 @@ export function CreatePassword({ isOpen, onOpen, onClose, onCreatePassword, sele
             let passwordRef;
 
             if (selectedPassword) {
-                // Updating an existing password, use the existing reference
                 passwordRef = ref(database, `passwords/${selectedPassword.passwordID}`);
             } else {
-                // Creating a new password, create a new reference
                 passwordRef = push(ref(database, 'passwords'));
             }
 
-            // Use set directly on the reference to update or create the password
             set(passwordRef, {
                 website: website,
                 username: username,
@@ -85,11 +85,17 @@ export function CreatePassword({ isOpen, onOpen, onClose, onCreatePassword, sele
             console.error('Error Saving Password:', error);
         }
 
-        // Close the modal
         onClose();
     }
 
-
+    const handleTogglePassword = () => {
+        setShowPassword(!showPassword);
+    };
+    useEffect(() => {
+        if (!isOpen) {
+            setShowPassword(false);
+        }
+    }, [isOpen]);
     return (
         <>
             <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
@@ -98,14 +104,13 @@ export function CreatePassword({ isOpen, onOpen, onClose, onCreatePassword, sele
                     <DrawerCloseButton />
 
                     <DrawerBody>
-                        <Flex direction="column" justify="space-between" h="100%" w="80%">
+                        <Flex direction="column" justify="space-between" h="100%" w="10%" >
 
                             <Slide in={isOpen} direction="right">
                                 <DrawerHeader textAlign="center">
                                     {selectedPassword ? 'Edit Password' : 'Create Password'}
                                 </DrawerHeader>
-
-                                <FormControl marginLeft="2vw" mb={4}>
+                                <FormControl marginLeft="2vw" paddingRight="5vw" mb={4}>
                                     <FormLabel>Website</FormLabel>
                                     <Input
                                         placeholder="Enter website"
@@ -114,7 +119,7 @@ export function CreatePassword({ isOpen, onOpen, onClose, onCreatePassword, sele
                                     />
                                 </FormControl>
 
-                                <FormControl marginLeft="2vw" mb={4}>
+                                <FormControl marginLeft="2vw" paddingRight="5vw" mb={4}>
                                     <FormLabel>Username</FormLabel>
                                     <Input
                                         placeholder="Enter username"
@@ -123,7 +128,7 @@ export function CreatePassword({ isOpen, onOpen, onClose, onCreatePassword, sele
                                     />
                                 </FormControl>
 
-                                <FormControl marginLeft="2vw" mb={4}>
+                                <FormControl marginLeft="2vw" paddingRight="5vw" mb={4}>
                                     <FormLabel>Email</FormLabel>
                                     <Input
                                         type="email"
@@ -133,17 +138,27 @@ export function CreatePassword({ isOpen, onOpen, onClose, onCreatePassword, sele
                                     />
                                 </FormControl>
 
-                                <FormControl marginLeft="2vw" mb={4}>
+                                <FormControl marginLeft="2vw" paddingRight="5vw" mb={4}>
                                     <FormLabel>Password</FormLabel>
-                                    <Input
-                                        type="password"
-                                        placeholder="Enter password"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                    />
+                                    <InputGroup>
+                                        <Input
+                                            type={showPassword ? 'text' : 'password'}
+                                            placeholder="Enter password"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                        />
+                                        <InputRightElement>
+                                            <IconButton
+                                                variant="ghost"
+                                                aria-label={showPassword ? 'Hide Password' : 'Show Password'}
+                                                icon={showPassword ? <FaEyeSlash /> : <FaEye />}
+                                                onClick={handleTogglePassword}
+                                            />
+                                        </InputRightElement>
+                                    </InputGroup>
                                 </FormControl>
 
-                                <FormControl marginLeft="2vw" mb={4}>
+                                <FormControl marginLeft="2vw" paddingRight="5vw" mb={4}>
                                     <FormLabel>Name of the Password</FormLabel>
                                     <Input
                                         type="text"
