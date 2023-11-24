@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, useDisclosure, Box, Text, VStack } from '@chakra-ui/react';
 import { CreatePassword } from './CreatePassword';
 import { getPasswordsWithCreatorID } from '../repo/repo';
+import { encryptText, decryptText } from '../repo/GlobalFunctions';
 
 export function Dashboard({ colorMode }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -11,6 +12,9 @@ export function Dashboard({ colorMode }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedPassword, setSelectedPassword] = useState(null);
+
+    console.log("Encryption " + encryptText('test', 'test'))
+    console.log("Decryption " + decryptText('U2FsdGVkX1/ta98pcF9ZLas8QglKly7ZibA9t3vrxhU=', 'test'))
 
     const userID = sessionStorage.getItem('userID');
 
