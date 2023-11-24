@@ -21,12 +21,7 @@ import {
     SliderTrack,
     SliderFilledTrack,
     SliderThumb,
-    AlertDialog,
-    AlertDialogBody,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogContent,
-    AlertDialogOverlay
+
 } from '@chakra-ui/react';
 import { toast } from 'react-toastify';
 import { ref, set, push } from 'firebase/database';

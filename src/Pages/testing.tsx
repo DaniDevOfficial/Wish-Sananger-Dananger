@@ -1,0 +1,69 @@
+// EncryptTest.tsx
+
+import React, { useState } from 'react';
+import { enc, AES } from 'crypto-js';
+
+export default function Test () {
+    const [text, setText] = useState('');
+    const [password, setPassword] = useState('');
+    const [encryptedText, setEncryptedText] = useState<string | null>(null);
+    const [decryptedText, setDecryptedText] = useState<string | null>(null);
+
+    const handleEncrypt = () => {
+        if (text && password) {
+            const encrypted = AES.encrypt(text, password).toString();
+            setEncryptedText(encrypted);
+        } else {
+            alert('Please enter text and password.');
+        }
+    };
+
+    const handleDecrypt = () => {
+        if (encryptedText && password) {
+            try {
+                
+                const decrypted = AES.decrypt(encryptedText, password).toString(enc.Utf8);
+                setDecryptedText(decrypted);
+            } catch (error) {
+                alert('Error decrypting. Please check your password.');
+            }
+        } else {
+            alert('Please enter encrypted text and password.');
+        }
+    };
+
+    return (
+        <div>
+            <h2>Encryption Test</h2>
+            <div>
+                <label>
+                    Text to Encrypt:
+                    <input type="text" value={text} onChange={(e) => setText(e.target.value)} />
+                </label>
+            </div>
+            <div>
+                <label>
+                    Password:
+                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                </label>
+            </div>
+            <div>
+                <button onClick={handleEncrypt}>Encrypt</button>
+            </div>
+            {encryptedText && (
+                <div>
+                    <strong>Encrypted Text:</strong> {encryptedText}
+                </div>
+            )}
+            <div>
+                <button onClick={handleDecrypt}>Decrypt</button>
+            </div>
+            {decryptedText && (
+                <div>
+                    <strong>Decrypted Text:</strong> {decryptedText}
+                </div>
+            )}
+        </div>
+    );
+};
+
