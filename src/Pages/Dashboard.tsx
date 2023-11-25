@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { Button, useDisclosure, Box, Text, VStack } from '@chakra-ui/react';
 import { CreatePassword } from './CreatePassword';
 import { getPasswordsWithCreatorID } from '../repo/repo';
-import { encryptText, decryptText } from '../repo/GlobalFunctions';
 
 export function Dashboard({ colorMode }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -14,7 +13,7 @@ export function Dashboard({ colorMode }) {
     const [selectedPassword, setSelectedPassword] = useState(null);
 
     const userID = sessionStorage.getItem('userID');
-
+    const key = sessionStorage.getItem('key')
     async function fetchPasswords() {
         try {
             const userPasswords = await getPasswordsWithCreatorID(userID);
@@ -54,6 +53,7 @@ export function Dashboard({ colorMode }) {
 
     return (
         <VStack align="stretch" spacing={4} p={4}>
+            {key}
             <Button onClick={handleCreateNewPassword}>Create New Password</Button>
             <CreatePassword
                 isOpen={isOpen}

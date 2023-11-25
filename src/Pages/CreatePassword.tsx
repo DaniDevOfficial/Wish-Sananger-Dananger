@@ -29,6 +29,7 @@ import { database } from '../firebase';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom"
 import { MdRefresh, MdDelete } from 'react-icons/md';
+import { encryptText, decryptText } from '../repo/GlobalFunctions';
 
 
 export function CreatePassword({ isOpen, onOpen, onClose, onCreatePassword, selectedPassword }) {
@@ -39,12 +40,9 @@ export function CreatePassword({ isOpen, onOpen, onClose, onCreatePassword, sele
     const [name, setName] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [passwordLength, setPasswordLength] = useState(12);
-    const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
 
-    const onDeleteAlertOpen = () => setIsDeleteAlertOpen(true);
-    const onDeleteAlertClose = () => setIsDeleteAlertOpen(false);
-    const cancelRef = useRef();
     const navigate = useNavigate();
+    const key = sessionStorage.getItem('key')
 
     useEffect(() => {
         if (selectedPassword) {
@@ -90,11 +88,11 @@ export function CreatePassword({ isOpen, onOpen, onClose, onCreatePassword, sele
             }
 
             set(passwordRef, {
-                website: website,
-                username: username,
-                email: email,
-                password: password,
-                name: name,
+                website: encryptText(website, key),
+                username: encryptText(username, key),
+                email: encryptText(email, key),
+                password: encryptText(password, key),
+                name: encryptText(name, key),
                 passwordID: selectedPassword ? selectedPassword.passwordID : passwordRef.key,
                 creatorID: creatorID,
             });

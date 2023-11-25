@@ -3,9 +3,11 @@
 import React, { useState } from 'react';
 import { enc, AES } from 'crypto-js';
 
-export default function Test () {
+export default function Test() {
     const [text, setText] = useState('');
     const [password, setPassword] = useState('');
+    const [hashinput, setHashInput] = useState<string | null>(null);
+    const [hashoutput, setHashOutput] = useState<string | null>(null);
     const [encryptedText, setEncryptedText] = useState<string | null>(null);
     const [decryptedText, setDecryptedText] = useState<string | null>(null);
 
@@ -18,10 +20,11 @@ export default function Test () {
         }
     };
 
+
     const handleDecrypt = () => {
         if (encryptedText && password) {
             try {
-                
+
                 const decrypted = AES.decrypt(encryptedText, password).toString(enc.Utf8);
                 setDecryptedText(decrypted);
             } catch (error) {
@@ -32,6 +35,8 @@ export default function Test () {
         }
     };
 
+
+    
     return (
         <div>
             <h2>Encryption Test</h2>
@@ -63,6 +68,13 @@ export default function Test () {
                     <strong>Decrypted Text:</strong> {decryptedText}
                 </div>
             )}
+
+
+
+            <button >Create Sha 256 hash</button>
+            <input type="text" placeholder='pasword to hash' onChange={(e) => setHashInput(e.target.value)}
+            />
+            {hashoutput}
         </div>
     );
 };

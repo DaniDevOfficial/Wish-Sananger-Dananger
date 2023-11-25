@@ -70,6 +70,8 @@ export function SignUp({ colorMode }: { colorMode: string }) {
                 sessionStorage.setItem('userID', userID);
                 sessionStorage.setItem('username', username);
                 sessionStorage.setItem('masterPassword', password);
+                const key = userID + "" + password
+                sessionStorage.setItem('key', key )
                 set(newUserRef, userData);
                 navigate('/dashboard');
 
