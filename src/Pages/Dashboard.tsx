@@ -13,37 +13,42 @@ export function Dashboard({ colorMode }) {
     const [error, setError] = useState(null);
     const [selectedPassword, setSelectedPassword] = useState(null);
 
-    console.log("Encryption " + encryptText('test', 'test'))
-    console.log("Decryption " + decryptText('U2FsdGVkX1/ta98pcF9ZLas8QglKly7ZibA9t3vrxhU=', 'test'))
-
     const userID = sessionStorage.getItem('userID');
 
-    async function fetchPasswords() {
-        try {
-            const userPasswords = await getPasswordsWithCreatorID(userID);
-            setPasswords(userPasswords);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            setError(error);
-        } finally {
-            setLoading(false);
-        }
-    }
+    const handleCreatePassword = async (password) => {
+        const encryptedPassword = encryptText(password.password, password);
 
-    useEffect(() => {
-        fetchPasswords();
-    }, [userID]);
-
-    const handleCreatePassword = (password) => {
         if (selectedPassword) {
-            console.log('Editing password:', password);
+            console.log('Editing password:', encryptedPassword);
         } else {
-            console.log('Creating password:', password);
+            console.log('Creating password:', encryptedPassword);
         }
 
         onClose();
         fetchPasswords();
     };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const userPasswords = await getPasswordsWithCreatorID(userID);
+
+                const decryptedPasswords = userPasswords.map((password) => ({
+                    ...password,
+                    password: decryptText(password.password, 'your-secret-key'),
+                }));
+
+                setPasswords(decryptedPasswords);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setError(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [userID]);
 
     const handleEditPassword = (password) => {
         setSelectedPassword(password);
