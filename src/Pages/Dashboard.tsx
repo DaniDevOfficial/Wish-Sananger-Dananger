@@ -16,7 +16,7 @@ export function Dashboard({ colorMode }) {
     const key = sessionStorage.getItem('key')
     async function fetchPasswords() {
         try {
-            const userPasswords = await getPasswordsWithCreatorID(userID);
+            const userPasswords = await getPasswordsWithCreatorID(userID, key);
             setPasswords(userPasswords);
         } catch (error) {
             console.error('Error fetching data:', error);
