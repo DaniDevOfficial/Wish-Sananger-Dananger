@@ -15,40 +15,32 @@ export function Dashboard({ colorMode }) {
 
     const userID = sessionStorage.getItem('userID');
 
-    const handleCreatePassword = async (password) => {
-        const encryptedPassword = encryptText(password.password, password);
+    async function fetchPasswords() {
+        try {
+            const userPasswords = await getPasswordsWithCreatorID(userID);
+            setPasswords(userPasswords);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            setError(error);
+        } finally {
+            setLoading(false);
+        }
+    }
 
+    useEffect(() => {
+        fetchPasswords();
+    }, [userID]);
+
+    const handleCreatePassword = (password) => {
         if (selectedPassword) {
-            console.log('Editing password:', encryptedPassword);
+            console.log('Editing password:', password);
         } else {
-            console.log('Creating password:', encryptedPassword);
+            console.log('Creating password:', password);
         }
 
         onClose();
         fetchPasswords();
     };
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const userPasswords = await getPasswordsWithCreatorID(userID);
-
-                const decryptedPasswords = userPasswords.map((password) => ({
-                    ...password,
-                    password: decryptText(password.password, 'your-secret-key'),
-                }));
-
-                setPasswords(decryptedPasswords);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                setError(error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, [userID]);
 
     const handleEditPassword = (password) => {
         setSelectedPassword(password);
