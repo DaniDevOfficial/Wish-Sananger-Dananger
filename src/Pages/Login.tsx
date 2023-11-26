@@ -20,7 +20,7 @@ import { toast } from "react-toastify";
 import { FaUser, FaLock } from "react-icons/fa";
 import { getUserByName } from '../repo/repo';
 import { Link, useNavigate  } from "react-router-dom";
-import { checkPassword } from "../repo/GlobalFunctions";
+import { checkPassword, hashPasswordSha256 } from "../repo/GlobalFunctions";
 
 export function Login({ colorMode }: { colorMode: string }) {
     const [username, setUsername] = useState<string | null>("");
@@ -59,7 +59,7 @@ export function Login({ colorMode }: { colorMode: string }) {
                     sessionStorage.setItem('username', userByName.username);
                     sessionStorage.setItem('masterPassword', password);
                     const key = userByName.userID + "" + password
-                    sessionStorage.setItem('key', key )
+                    sessionStorage.setItem('key', hashPasswordSha256(key) )
                     console.log(sessionStorage.getItem("userID"))
 
                     

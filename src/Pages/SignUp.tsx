@@ -24,7 +24,7 @@ import { Link } from "react-router-dom";
 import { ref, push, set } from 'firebase/database';
 import { database } from '../firebase';
 import { useNavigate } from "react-router-dom"
-import { hashPasswordBcrypt } from '../repo/GlobalFunctions';
+import { hashPasswordBcrypt, hashPasswordSha256 } from '../repo/GlobalFunctions';
 
 export function SignUp({ colorMode }: { colorMode: string }) {
     const [username, setUsername] = useState<string | null>("");
@@ -71,7 +71,7 @@ export function SignUp({ colorMode }: { colorMode: string }) {
                 sessionStorage.setItem('username', username);
                 sessionStorage.setItem('masterPassword', password);
                 const key = userID + "" + password
-                sessionStorage.setItem('key', key )
+                sessionStorage.setItem('key', hashPasswordSha256(key) )
                 set(newUserRef, userData);
                 navigate('/dashboard');
 

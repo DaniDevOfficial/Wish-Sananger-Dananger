@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { enc, AES } from 'crypto-js';
+import sha256 from 'crypto-js/sha256';
 
 export default function Test() {
     const [text, setText] = useState('');
@@ -20,7 +21,7 @@ export default function Test() {
         }
     };
 
-
+    const hashed = sha256("wasd").toString()
     const handleDecrypt = () => {
         if (encryptedText && password) {
             try {
@@ -36,7 +37,10 @@ export default function Test() {
     };
 
 
-    
+    function handleHash() {
+        hash.update(hashinput);
+         setHashOutput(hash.digest('hex'))
+    }
     return (
         <div>
             <h2>Encryption Test</h2>
@@ -71,10 +75,10 @@ export default function Test() {
 
 
 
-            <button >Create Sha 256 hash</button>
+            <button onClick={handleHash} >Create Sha 256 hash</button>
             <input type="text" placeholder='pasword to hash' onChange={(e) => setHashInput(e.target.value)}
             />
-            {hashoutput}
+            {hashed}
         </div>
     );
 };

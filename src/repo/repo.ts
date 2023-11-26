@@ -54,7 +54,6 @@ export async function getPasswordsWithCreatorID(creatorID, key) {
       const passwords = passwordArray
         .filter((password) => password.creatorID === creatorID)
         .map((password) => {
-          // Decrypt sensitive information
           return {
             ...password,
             email: decryptText(password.email, key),
