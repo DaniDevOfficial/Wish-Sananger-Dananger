@@ -56,8 +56,6 @@ export function Login({ colorMode }: { colorMode: string }) {
                     });
                 } else {
                     sessionStorage.setItem('userID', userByName.userID);
-                    sessionStorage.setItem('username', userByName.username);
-                    sessionStorage.setItem('masterPassword', password);
                     const key = userByName.userID + "" + password
                     sessionStorage.setItem('key', hashPasswordSha256(key) )
                     console.log(sessionStorage.getItem("userID"))
