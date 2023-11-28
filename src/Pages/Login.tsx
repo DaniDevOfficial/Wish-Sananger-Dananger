@@ -88,7 +88,7 @@ export function Login({ colorMode }: { colorMode: string }) {
                 bg={colorMode === "light" ? "gray.400" : "gray.600"}
                 borderRadius="lg"
                 boxShadow="md"
-                width="50vw"
+                width={{ base: "90vw", md: "50vw" }} 
                 textAlign="center"
             >
                 <Heading as="h2" size="xl" marginBottom="10" mt={2}>

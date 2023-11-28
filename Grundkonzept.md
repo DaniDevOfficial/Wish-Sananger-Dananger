@@ -33,5 +33,6 @@ Die Passwörter werden verschlüsselt in einer Datenbank gespeichert.
 
 ### Everything
 ![Diagramm3](/diagramms/all.jpg)
+Hier wird das passwort bei der Validierung Encrypted sodass diese in der Datenbank nicht lerserlich sind
 
 

@@ -1,9 +1,10 @@
 // Dashboard.jsx
 
 import React, { useEffect, useState } from 'react';
-import { Button, useDisclosure, Box, Text, VStack } from '@chakra-ui/react';
+import { Button, useDisclosure, Box, Text, VStack, HStack } from '@chakra-ui/react';
 import { CreatePassword } from './CreatePassword';
 import { getPasswordsWithCreatorID } from '../repo/repo';
+import { Link, useNavigate } from 'react-router-dom';
 
 export function Dashboard({ colorMode }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -11,7 +12,7 @@ export function Dashboard({ colorMode }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedPassword, setSelectedPassword] = useState(null);
-
+    const navigate = useNavigate();
     const userID = sessionStorage.getItem('userID');
     const key = sessionStorage.getItem('key')
     async function fetchPasswords() {
@@ -41,6 +42,10 @@ export function Dashboard({ colorMode }) {
         fetchPasswords();
     };
 
+    const handleAccountButtonClick = () => {
+        navigate('/account');
+    };
+
     const handleEditPassword = (password) => {
         setSelectedPassword(password);
         onOpen();
@@ -53,8 +58,18 @@ export function Dashboard({ colorMode }) {
 
     return (
         <VStack align="stretch" spacing={4} p={4}>
-            {key}
-            <Button onClick={handleCreateNewPassword}>Create New Password</Button>
+            <HStack spacing={4} justifyContent="space-between" width="100%">
+                <Button flex="1" onClick={handleCreateNewPassword}>
+                    Create New Password
+                </Button>
+
+                <Button onClick={handleAccountButtonClick} flexShrink={0}>
+                    <HStack spacing={2}>
+                        <Text>Name</Text>
+                        <Box w={6} h={6} borderRadius="full" bg="gray.300" /* Add profile picture styling */ />
+                    </HStack>
+                </Button>
+            </HStack>
             <CreatePassword
                 isOpen={isOpen}
                 onOpen={onOpen}
