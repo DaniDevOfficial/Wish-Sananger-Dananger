@@ -39,7 +39,7 @@ export function Login({ colorMode }: { colorMode: string }) {
         }
 
         try {
-            const userByName = await getUserByName(username);
+            const userByName = await getUserByName(username.trim());
 
             if (!userByName) {
                 console.log("Invalid username or password");
@@ -48,7 +48,7 @@ export function Login({ colorMode }: { colorMode: string }) {
                     autoClose: 5000,
                 });
             } else {
-                if (!await checkPassword(password, userByName.hashedPassword)) {
+                if (!await checkPassword(password.trim(), userByName.hashedPassword)) {
                     console.log("Invalid username or password");
                     toast.error("Invalid username or password", {
                         position: toast.POSITION.TOP_RIGHT,
@@ -56,11 +56,11 @@ export function Login({ colorMode }: { colorMode: string }) {
                     });
                 } else {
                     sessionStorage.setItem('userID', userByName.userID);
-                    const key = userByName.userID + "" + password
+                    sessionStorage.setItem('username', userByName.username);
+                    const key = userByName.userID + "" + password.trim()
                     sessionStorage.setItem('key', hashPasswordSha256(key) )
                     console.log(sessionStorage.getItem("userID"))
 
-                    
                     
                     console.log("Logged in");
                     toast.success("Logged in");

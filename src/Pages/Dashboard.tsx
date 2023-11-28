@@ -15,6 +15,7 @@ export function Dashboard({ colorMode }) {
     const navigate = useNavigate();
     const userID = sessionStorage.getItem('userID');
     const key = sessionStorage.getItem('key')
+    const username = sessionStorage.getItem('username')
     async function fetchPasswords() {
         try {
             const userPasswords = await getPasswordsWithCreatorID(userID, key);
@@ -65,8 +66,8 @@ export function Dashboard({ colorMode }) {
 
                 <Button onClick={handleAccountButtonClick} flexShrink={0}>
                     <HStack spacing={2}>
-                        <Text>Name</Text>
-                        <Box w={6} h={6} borderRadius="full" bg="gray.300" /* Add profile picture styling */ />
+                        <Text>Hey, {username}</Text>
+                        <Box w={6} h={6} borderRadius="full" bg="gray.300" />
                     </HStack>
                 </Button>
             </HStack>
