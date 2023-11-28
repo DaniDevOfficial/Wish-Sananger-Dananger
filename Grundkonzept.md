@@ -1,0 +1,28 @@
+# Grundkonzept Wish-Sananger-Dananger
+
+## Zielsetzung
+
+Das Ziel des Password Manager ist die sichere Speicherung und Bereitstellung von Login Daten des Benutzers. Die Passwörter sollen verschlüsselt in einer Datenbank gespeichert werden. Die Daten sollen angepasst werden können. Ausserdem sollte ein Passwort generator vorhanden sein. 
+
+## Anforderungen
+
+- [ ] Passwörter verschlüsselt speichern
+- [ ] Passwörter anpassen können
+- [ ] Passwort Generator
+- [ ] Passwörter anzeigen
+- [ ] Passwörter löschen
+- [ ] Passwörter hinzufügen
+
+## Benutzeroberfläche
+
+Die Oberfläche soll simpel und intuitiv sein. 
+Gestalten wird diese mithilfe von Chakra-UI
+
+## Sicherheit
+
+Die Passwörter werden verschlüsselt in einer Datenbank gespeichert. 
+
+
+## Diagramme
+
+![Diagramm1]()
