@@ -13,15 +13,17 @@ import {
     Link as ChakraLink,
     Text,
     Flex,
+    useMediaQuery,
+    useTheme
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { FaUser, FaLock } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { checkMasterPassword, encryptText, hashPasswordBcrypt, hashPasswordSha256 } from "../repo/GlobalFunctions";
-import { getPasswordsWithCreatorID } from "../repo/repo";
+import { getPasswordsWithCreatorID, getUserByName } from "../repo/repo";
 import { database } from "../firebase";
-import { ref, set } from "firebase/database";
+import { ref, set, update } from "firebase/database";
 
 export function Account({ colorMode }: { colorMode: string }) {
     const [masterPassword, setMasterPassword] = useState<string | null>("");
@@ -29,6 +31,8 @@ export function Account({ colorMode }: { colorMode: string }) {
     const [newUsername, setNewUsername] = useState<string | null>("");
     const [confirmPassword, setConfirmPassword] = useState<string | null>("");
     const [confirmMasterPassword, setConfirmMasterPassword] = useState<string | null>("");
+    const theme = useTheme();
+    const [isMd] = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
 
     const userID = sessionStorage.getItem("userID")
     const username = sessionStorage.getItem("username")
@@ -45,8 +49,8 @@ export function Account({ colorMode }: { colorMode: string }) {
 
         if (masterCheck) {
             const plainKey = userID + "" + newPassword;
-             const newKey = hashPasswordSha256(plainKey);
-             sessionStorage.setItem("key", newKey)
+            const newKey = hashPasswordSha256(plainKey);
+            sessionStorage.setItem("key", newKey)
             const userPasswords = await getPasswordsWithCreatorID(userID, key);
 
             console.log(1)
@@ -76,7 +80,7 @@ export function Account({ colorMode }: { colorMode: string }) {
                 userID: userID,
             };
             set(userRef, userData)
-
+            toast.success("Changed masterpassword")
         } else {
             return;
         }
@@ -98,7 +102,22 @@ export function Account({ colorMode }: { colorMode: string }) {
 
 
     async function verifyAndChangeUsername() {
-        // await verifyMasterPassword();
+        if (!newUsername || !confirmMasterPassword) return
+        const userByName = await getUserByName(newUsername);
+
+        if (userByName) {
+            console.log("A user with this name already exists");
+            toast.error("A user with this name already exists", {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 5000,
+            });
+        } else {
+            const userRef = ref(database, `users/${userID}`);
+            update(userRef, {
+                username: newUsername
+            })
+            toast.success("Updated Username to: " + newUsername)
+        }
     }
 
 
@@ -208,7 +227,7 @@ export function Account({ colorMode }: { colorMode: string }) {
                     </Box>
 
                 </SimpleGrid>
-                <Flex justifyContent="space-between" alignItems="center">
+                <Flex justifyContent="space-between" alignItems="center" display={isMd ? "flex" : "none"}>
                     <Button
                         colorScheme="purple"
                         marginTop="4"
