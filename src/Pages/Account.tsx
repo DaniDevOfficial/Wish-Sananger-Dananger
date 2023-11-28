@@ -149,7 +149,7 @@ export function Account({ colorMode }: { colorMode: string }) {
                     Back to Dashboard
                 </Button>
                 <Heading as="h2" size="xl" marginBottom="10" mt={2}>
-                    Account Settings:
+                    Account Settings: {username}
                 </Heading>
                 <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
                     <Box mt="-10px">
@@ -194,7 +194,17 @@ export function Account({ colorMode }: { colorMode: string }) {
                                 </InputRightElement>
                             </InputGroup>
                         </FormControl>
-
+                        <Button
+                            display={!isMd ? "flex" : "none"}
+                            colorScheme="purple"
+                            marginTop="4"
+                            onClick={verifyAndChangePassword}
+                            disabled={!masterPassword || !newPassword || newPassword !== confirmPassword}
+                            marginLeft="auto"
+                            marginRight="auto"
+                        >
+                            Change Master Password
+                        </Button>
                     </Box>
                     <Box mt="-10px">
                         <FormControl isRequired>
@@ -224,6 +234,17 @@ export function Account({ colorMode }: { colorMode: string }) {
                             </InputGroup>
                         </FormControl>
 
+                        <Button
+                            display={!isMd ? "flex" : "none"}
+                            colorScheme="purple"
+                            marginTop="4"
+                            onClick={verifyAndChangeUsername}
+                            disabled={!masterPassword || !newUsername}
+                            marginLeft="auto"
+                            marginRight="auto"
+                        >
+                            Change Username
+                        </Button>
                     </Box>
 
                 </SimpleGrid>
