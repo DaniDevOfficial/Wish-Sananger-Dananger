@@ -12,6 +12,7 @@ import {
     Button,
     Link as ChakraLink,
     Text,
+    Flex,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -24,6 +25,7 @@ export function Account({ colorMode }: { colorMode: string }) {
     const [newPassword, setNewPassword] = useState<string | null>("");
     const [newUsername, setNewUsername] = useState<string | null>("");
     const [confirmPassword, setConfirmPassword] = useState<string | null>("");
+    const [confirmMasterPassword, setConfirmMasterPassword] = useState<string | null>("");
 
     const navigate = useNavigate();
 
@@ -96,85 +98,105 @@ export function Account({ colorMode }: { colorMode: string }) {
                     Account Settings
                 </Heading>
                 <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
-                    <FormControl isRequired>
-                        <InputGroup variant="custom" colorScheme="purple">
-                            <InputLeftAddon>Master Password:</InputLeftAddon>
-                            <Input
-                                type="password"
-                                placeholder="Your Master Password"
-                                color={colorMode === "light" ? "black" : "white.400"}
-                                onChange={(e) => setMasterPassword(e.target.value)}
-                            />
-                            <InputRightElement pointerEvents="none">
-                                <Icon as={FaLock} color="red.400" />
-                            </InputRightElement>
-                        </InputGroup>
-                    </FormControl>
+                    <Box mt="-10px">
+                        <FormControl isRequired>
+                            <InputGroup variant="custom" colorScheme="purple" margin="10px 0">
+                                <Input
+                                    type="password"
+                                    placeholder="Your Master Password"
+                                    color={colorMode === "light" ? "black" : "white.400"}
+                                    onChange={(e) => setMasterPassword(e.target.value)}
+                                />
+                                <InputRightElement pointerEvents="none">
+                                    <Icon as={FaLock} color="red.400" />
+                                </InputRightElement>
+                            </InputGroup>
+                        </FormControl>
 
-                    <FormControl isRequired>
-                        <InputGroup variant="custom" colorScheme="purple">
-                            <InputLeftAddon>New Password:</InputLeftAddon>
-                            <Input
-                                type="password"
-                                placeholder="New Password"
-                                color={colorMode === "light" ? "black" : "white.400"}
-                                onChange={(e) => setNewPassword(e.target.value)}
-                            />
-                            <InputRightElement pointerEvents="none">
-                                <Icon as={FaLock} color="red.400" />
-                            </InputRightElement>
-                        </InputGroup>
-                    </FormControl>
+                        <FormControl isRequired>
+                            <InputGroup variant="custom" colorScheme="purple" margin="10px 0">
+                                <Input
+                                    type="password"
+                                    placeholder="New Password"
+                                    color={colorMode === "light" ? "black" : "white.400"}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                />
+                                <InputRightElement pointerEvents="none">
+                                    <Icon as={FaLock} color="red.400" />
+                                </InputRightElement>
+                            </InputGroup>
+                        </FormControl>
 
-                    <FormControl isRequired>
-                        <InputGroup variant="custom" colorScheme="purple">
-                            <InputLeftAddon>Confirm Password:</InputLeftAddon>
-                            <Input
-                                type="password"
-                                placeholder="Confirm Password"
-                                color={colorMode === "light" ? "black" : "white.400"}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                            />
-                            <InputRightElement pointerEvents="none">
-                                <Icon as={FaLock} color="red.400" />
-                            </InputRightElement>
-                        </InputGroup>
-                    </FormControl>
+                        <FormControl isRequired>
+                            <InputGroup variant="custom" colorScheme="purple" margin="10px 0">
+                                <Input
+                                    type="password"
+                                    placeholder="Confirm Password"
+                                    color={colorMode === "light" ? "black" : "white.400"}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                />
+                                <InputRightElement pointerEvents="none">
+                                    <Icon as={FaLock} color="red.400" />
+                                </InputRightElement>
+                            </InputGroup>
+                        </FormControl>
 
+                    </Box>
+                    <Box mt="-10px">
+                        <FormControl isRequired>
+                            <InputGroup variant="custom" colorScheme="purple" margin="10px 0">
+                                <Input
+                                    type="text"
+                                    placeholder="New Username"
+                                    color={colorMode === "light" ? "black" : "gray.100"}
+                                    onChange={(e) => setNewUsername(e.target.value)}
+                                />
+                                <InputRightElement pointerEvents="none">
+                                    <Icon as={FaUser} color="green.400" />
+                                </InputRightElement>
+                            </InputGroup>
+                        </FormControl>
+                        <FormControl isRequired>
+                            <InputGroup variant="custom" colorScheme="purple" margin="10px 0">
+                                <Input
+                                    type="password"
+                                    placeholder="Confirm Password"
+                                    color={colorMode === "light" ? "black" : "white.400"}
+                                    onChange={(e) => setConfirmMasterPassword(e.target.value)}
+                                />
+                                <InputRightElement pointerEvents="none">
+                                    <Icon as={FaLock} color="red.400" />
+                                </InputRightElement>
+                            </InputGroup>
+                        </FormControl>
+
+                    </Box>
+
+                </SimpleGrid>
+                <Flex justifyContent="space-between" alignItems="center">
                     <Button
                         colorScheme="purple"
                         marginTop="4"
                         onClick={verifyAndChangePassword}
                         disabled={!masterPassword || !newPassword || newPassword !== confirmPassword}
+                        marginLeft="auto"
+                        marginRight="auto"
                     >
                         Change Master Password
                     </Button>
-
-                    <FormControl isRequired>
-                        <InputGroup variant="custom" colorScheme="purple">
-                            <InputLeftAddon>New Username:</InputLeftAddon>
-                            <Input
-                                type="text"
-                                placeholder="New Username"
-                                color={colorMode === "light" ? "black" : "gray.100"}
-                                onChange={(e) => setNewUsername(e.target.value)}
-                            />
-                            <InputRightElement pointerEvents="none">
-                                <Icon as={FaUser} color="green.400" />
-                            </InputRightElement>
-                        </InputGroup>
-                    </FormControl>
-
                     <Button
                         colorScheme="purple"
                         marginTop="4"
                         onClick={verifyAndChangeUsername}
                         disabled={!masterPassword || !newUsername}
+                        marginLeft="auto" 
+                        marginRight="auto" 
                     >
                         Change Username
                     </Button>
-                </SimpleGrid>
-            </Box>
-        </Box>
+                </Flex>
+
+            </Box >
+        </Box >
     );
 }
