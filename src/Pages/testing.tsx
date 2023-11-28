@@ -23,10 +23,10 @@ export default function Test() {
 
     const hashed = sha256("wasd").toString()
     const handleDecrypt = () => {
-        if (encryptedText && password) {
+        if (text && password) {
             try {
 
-                const decrypted = AES.decrypt(encryptedText, password).toString(enc.Utf8);
+                const decrypted = AES.decrypt(text, password).toString(enc.Utf8);
                 setDecryptedText(decrypted);
             } catch (error) {
                 alert('Error decrypting. Please check your password.');

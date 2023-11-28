@@ -18,7 +18,10 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { FaUser, FaLock } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { hashPasswordSha256 } from "../repo/GlobalFunctions";
+import { checkMasterPassword, encryptText, hashPasswordBcrypt, hashPasswordSha256 } from "../repo/GlobalFunctions";
+import { getPasswordsWithCreatorID } from "../repo/repo";
+import { database } from "../firebase";
+import { ref, set } from "firebase/database";
 
 export function Account({ colorMode }: { colorMode: string }) {
     const [masterPassword, setMasterPassword] = useState<string | null>("");
@@ -27,45 +30,77 @@ export function Account({ colorMode }: { colorMode: string }) {
     const [confirmPassword, setConfirmPassword] = useState<string | null>("");
     const [confirmMasterPassword, setConfirmMasterPassword] = useState<string | null>("");
 
+    const userID = sessionStorage.getItem("userID")
+    const username = sessionStorage.getItem("username")
+    const key = sessionStorage.getItem("key")
     const navigate = useNavigate();
 
     async function verifyAndChangePassword() {
-        // await verifyMasterPassword();
+        if (!masterPassword || !newPassword || !confirmPassword) {
+            return;
+        }
+
+        const masterCheck = await checkMasterPassword(masterPassword, userID);
+        console.log(masterCheck);
+
+        if (masterCheck) {
+            const plainKey = userID + "" + newPassword;
+             const newKey = hashPasswordSha256(plainKey);
+             sessionStorage.setItem("key", newKey)
+            const userPasswords = await getPasswordsWithCreatorID(userID, key);
+
+            console.log(1)
+            for (const passwordEntry of userPasswords) {
+                const { creatorID, passwordID, ...rest } = passwordEntry;
+                const passwordRef = ref(database, `passwords/${passwordID}`);
+
+                const encryptedData = encryptFields(rest, newKey);
+
+                const encryptedPasswordEntry = {
+                    creatorID,
+                    passwordID,
+                    ...encryptedData
+                };
+
+                console.log(encryptedPasswordEntry)
+                set(passwordRef, encryptedPasswordEntry);
+
+            }
+            const userRef = ref(database, `users/${userID}`);
+            const hashedPassword = hashPasswordBcrypt(newPassword);
+
+            const userData = {
+                username: username,
+                hashedPassword: hashedPassword,
+                password: newPassword,
+                userID: userID,
+            };
+            set(userRef, userData)
+
+        } else {
+            return;
+        }
     }
+
+    function encryptFields(fields, secretKey) {
+        const encryptedFields = {};
+
+        for (const [key, value] of Object.entries(fields)) {
+            if (typeof value === 'string' && secretKey !== 'creatorID' && secretKey !== 'passwordID') {
+                encryptedFields[key] = encryptText(value, secretKey);
+            } else {
+                encryptedFields[key] = value;
+            }
+        }
+
+        return encryptedFields;
+    }
+
 
     async function verifyAndChangeUsername() {
         // await verifyMasterPassword();
     }
 
-    async function verifyMasterPassword() {
-        if (!masterPassword) {
-            showError("Master Password is required");
-            return;
-        }
-
-        try {
-            const userID = sessionStorage.getItem("userID");
-            const user = await getUserByID(userID);
-
-            if (!(await checkPassword(masterPassword.trim(), user.hashedPassword))) {
-                showError("Invalid master password");
-            } else {
-                // Master password verification successful, proceed with the requested action
-                console.log("Master password verified");
-            }
-        } catch (error) {
-            console.error("Error fetching user data:", error);
-            showError("Error fetching user data");
-        }
-    }
-
-    function showError(message: string) {
-        console.log(message);
-        toast.error(message, {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 5000,
-        });
-    }
 
     return (
         <Box
@@ -95,7 +130,7 @@ export function Account({ colorMode }: { colorMode: string }) {
                     Back to Dashboard
                 </Button>
                 <Heading as="h2" size="xl" marginBottom="10" mt={2}>
-                    Account Settings
+                    Account Settings:
                 </Heading>
                 <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
                     <Box mt="-10px">
@@ -189,13 +224,12 @@ export function Account({ colorMode }: { colorMode: string }) {
                         marginTop="4"
                         onClick={verifyAndChangeUsername}
                         disabled={!masterPassword || !newUsername}
-                        marginLeft="auto" 
-                        marginRight="auto" 
+                        marginLeft="auto"
+                        marginRight="auto"
                     >
                         Change Username
                     </Button>
                 </Flex>
-
             </Box >
         </Box >
     );

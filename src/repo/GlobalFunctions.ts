@@ -2,6 +2,7 @@
 import bcrypt from 'bcryptjs';
 import { AES, enc } from 'crypto-js';
 import sha256 from 'crypto-js/sha256';
+import { getUserByID } from './repo';
 
 export function hashPasswordBcrypt(password: string): string {
   const saltRounds = 10;
@@ -12,6 +13,17 @@ export function hashPasswordSha256(input: string): string{
 }
 export function checkPassword(inputPassword: string, hashedPassword: string): boolean {
   return bcrypt.compareSync(inputPassword, hashedPassword);
+}
+ export async function checkMasterPassword(input: string, userID: string): Promise<boolean>{
+
+  const user = await getUserByID(userID)
+  return bcrypt.compareSync(input, user.hashedPassword);
+
+}
+
+export async function checkIfUsernameIsTaken(username: string){
+  
+  
 }
 
 export function encryptText(plainText: string, secretKey: string):string | null | undefined {

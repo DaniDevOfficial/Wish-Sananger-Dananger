@@ -42,7 +42,36 @@ export async function getUserByName(usernameToFind: string) {
   }
 }
 
-export async function getPasswordsWithCreatorID(creatorID: string , key: string ) {
+export async function getUserByID(userID: string) {
+  const dataRef = ref(database, 'users');
+
+  try {
+    const snapshot = await get(dataRef);
+    const data = snapshot.val();
+
+
+    if (data && typeof data === 'object') {
+      const usersArray: {
+        userID: string; username: string; hashedPassword: string
+      }[] = Object.values(data);
+
+      const user: User | undefined = usersArray.find((user) => user.userID === userID);
+      if (user) {
+        return user;
+      } else {
+        return null;
+      }
+    } else {
+      console.error('Invalid data format');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+
+export async function getPasswordsWithCreatorID(creatorID: string, key: string) {
   const dataRef = ref(database, "/passwords");
   try {
     const snapshot = await get(dataRef);
@@ -80,6 +109,7 @@ export async function getPasswordsWithCreatorID(creatorID: string , key: string 
     throw error;
   }
 }
+
 
 
 export async function getPasswordByID(passwordID, key) {
