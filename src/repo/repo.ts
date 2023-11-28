@@ -1,7 +1,7 @@
 import { ref, get } from 'firebase/database';
 import { database } from '../firebase';
 import { User, Password } from './types';
-
+import { decryptText } from './GlobalFunctions';
 
 export async function getAllData(path: string) {
   const dataRef = ref(database, path);
@@ -42,24 +42,33 @@ export async function getUserByName(usernameToFind: string) {
   }
 }
 
-export async function getPasswordsWithCreatorID(creatorID: string) {
+export async function getPasswordsWithCreatorID(creatorID: string , key: string ) {
   const dataRef = ref(database, "/passwords");
   try {
     const snapshot = await get(dataRef);
     const data = snapshot.val();
 
     if (data && typeof data === 'object') {
-      const passwordArray: {
-        creatorID: string
-      }[] = Object.values(data);
+      const passwordArray = Object.values(data);
 
-      const passwords: Password[] = passwordArray.filter((password) => password.creatorID === creatorID);
-      console.log(passwords)
+      const passwords = passwordArray
+        .filter((password) => password.creatorID === creatorID)
+        .map((password) => {
+          return {
+            ...password,
+            email: decryptText(password.email, key),
+            name: decryptText(password.name, key),
+            password: decryptText(password.password, key),
+            username: decryptText(password.username, key),
+            website: decryptText(password.website, key),
+          };
+        });
+
+      console.log(passwords);
+
       if (passwords.length > 0) {
         return passwords;
-        
       } else {
-        // No users found with the given creatorID
         return [];
       }
     } else {
@@ -73,22 +82,27 @@ export async function getPasswordsWithCreatorID(creatorID: string) {
 }
 
 
-export async function getPasswordByID(passwordID: string) {
+export async function getPasswordByID(passwordID, key) {
   const dataRef = ref(database, "/passwords");
   try {
     const snapshot = await get(dataRef);
     const data = snapshot.val();
 
-
     if (data && typeof data === 'object') {
-      const passwordArray: { passwordID: string }[] = Object.values(data);
+      const passwordArray = Object.values(data);
 
-      const user: User | undefined = passwordArray.find((passwords) => passwords.passwordID === passwordID);
+      const password = passwordArray.find((password) => password.passwordID === passwordID);
 
-      if (user) {
-        return user;
+      if (password) {
+        return {
+          ...password,
+          email: decryptText(password.email, key),
+          name: decryptText(password.name, key),
+          password: decryptText(password.password, key),
+          username: decryptText(password.username, key),
+          website: decryptText(password.website, key),
+        };
       } else {
-        // user doesnt exist (no console log for safety)
         return null;
       }
     } else {

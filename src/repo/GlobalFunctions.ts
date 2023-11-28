@@ -1,12 +1,15 @@
 // Note: Global Functions
 import bcrypt from 'bcryptjs';
 import { AES, enc } from 'crypto-js';
+import sha256 from 'crypto-js/sha256';
 
 export function hashPasswordBcrypt(password: string): string {
   const saltRounds = 10;
   return bcrypt.hashSync(password, saltRounds);
 }
-
+export function hashPasswordSha256(input: string): string{
+  return sha256(input).toString()
+}
 export function checkPassword(inputPassword: string, hashedPassword: string): boolean {
   return bcrypt.compareSync(inputPassword, hashedPassword);
 }

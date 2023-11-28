@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { Button, useDisclosure, Box, Text, VStack } from '@chakra-ui/react';
 import { CreatePassword } from './CreatePassword';
 import { getPasswordsWithCreatorID } from '../repo/repo';
-import { encryptText, decryptText } from '../repo/GlobalFunctions';
 
 export function Dashboard({ colorMode }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -14,41 +13,33 @@ export function Dashboard({ colorMode }) {
     const [selectedPassword, setSelectedPassword] = useState(null);
 
     const userID = sessionStorage.getItem('userID');
+    const key = sessionStorage.getItem('key')
+    async function fetchPasswords() {
+        try {
+            const userPasswords = await getPasswordsWithCreatorID(userID, key);
+            setPasswords(userPasswords);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            setError(error);
+        } finally {
+            setLoading(false);
+        }
+    }
 
-    const handleCreatePassword = async (password) => {
-        const encryptedPassword = encryptText(password.password, password);
+    useEffect(() => {
+        fetchPasswords();
+    }, [userID]);
 
+    const handleCreatePassword = (password) => {
         if (selectedPassword) {
-            console.log('Editing password:', encryptedPassword);
+            console.log('Editing password:', password);
         } else {
-            console.log('Creating password:', encryptedPassword);
+            console.log('Creating password:', password);
         }
 
         onClose();
         fetchPasswords();
     };
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const userPasswords = await getPasswordsWithCreatorID(userID);
-
-                const decryptedPasswords = userPasswords.map((password) => ({
-                    ...password,
-                    password: decryptText(password.password, 'your-secret-key'),
-                }));
-
-                setPasswords(decryptedPasswords);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                setError(error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, [userID]);
 
     const handleEditPassword = (password) => {
         setSelectedPassword(password);
@@ -62,6 +53,7 @@ export function Dashboard({ colorMode }) {
 
     return (
         <VStack align="stretch" spacing={4} p={4}>
+            {key}
             <Button onClick={handleCreateNewPassword}>Create New Password</Button>
             <CreatePassword
                 isOpen={isOpen}
