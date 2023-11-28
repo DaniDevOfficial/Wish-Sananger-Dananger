@@ -7,7 +7,6 @@ import {
 import { FaMoon, FaSun } from "react-icons/fa"
 import { SignUp } from "./SignUp";
 import { Dashboard } from "./Dashboard";
-import { CreatePassword } from "./CreatePassword";
 import Testing from "./testing";
 export function RouterWrapper() {
     const { toggleColorMode, colorMode } = useColorMode();

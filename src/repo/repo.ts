@@ -42,7 +42,7 @@ export async function getUserByName(usernameToFind: string) {
   }
 }
 
-export async function getPasswordsWithCreatorID(creatorID, key) {
+export async function getPasswordsWithCreatorID(creatorID: string , key: string ) {
   const dataRef = ref(database, "/passwords");
   try {
     const snapshot = await get(dataRef);

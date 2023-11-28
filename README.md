@@ -81,34 +81,30 @@ It's a group project with 2 members.
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+* Important is that you will need a firebase.ts file. This is a config file you can get generated from Firebase
 
 ### Prerequisites
 
 This is an example of how to list things you need to use the software and how to install them.
-* npm
+* npm 
   ```sh
   npm install npm@latest -g
   ```
 
 ### Installation
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
+This is a tutorial you can simply copy and paste to be able to run the app
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
    git clone https://github.com/your_username_/Project-Name.git
    ```
-3. Install NPM packages
+2. Install NPM packages
    ```sh
    npm install
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+3. Enter your config in `firebase.ts`
+  
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -129,11 +125,27 @@ You can use this app to store your passwords in a secure way. It's secure becaus
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+This project is licensed under the Creative Commons Attribution 4.0 International License. To view a copy of this license, visit [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
+### You are free to:
 
+- **Share**: Copy and redistribute the material in any medium or format.
+- **Adapt**: Remix, transform, and build upon the material for any purpose, even commercially.
+
+The licensor cannot revoke these freedoms as long as you follow the license terms.
+
+### Under the following terms:
+
+- **Attribution**: You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
+
+No additional restrictions: You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.
+
+#### Attribution Information:
+
+When using this work, please provide the following attribution:
+
+"Wish SanangerDananger" by DaniDevOfficial is licensed under CC BY 4.0. To view a copy of this license, visit [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
 <!-- CONTACT -->
 ## Contact
