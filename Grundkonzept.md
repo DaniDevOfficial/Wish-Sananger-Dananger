@@ -25,4 +25,13 @@ Die Passwörter werden verschlüsselt in einer Datenbank gespeichert.
 
 ## Diagramme
 
-![Diagramm1]()
+### Account Creation
+![Diagramm1](/diagramms/account_creation.jpg)
+
+### Get Passwords
+![Diagramm2](/diagramms/getPasswords.png)
+
+### Everything
+![Diagramm3](/diagramms/all.jpg)
+
+
