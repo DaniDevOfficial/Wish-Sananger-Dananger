@@ -13,19 +13,22 @@ import {
     Button,
     Link as ChakraLink,
     Text,
+    useColorModeValue,
 
 } from "@chakra-ui/react";
-import { useState } from "react";
 import { toast } from "react-toastify";
+import { useState } from "react";
 import { FaUser, FaLock } from "react-icons/fa";
 import { getUserByName } from '../repo/repo';
-import { Link, useNavigate  } from "react-router-dom";
-import { checkPassword, hashPasswordSha256 } from "../repo/GlobalFunctions";
+import { Link } from "react-router-dom";
+import { ref, push, set } from 'firebase/database';
+import { database } from '../firebase';
+import { useNavigate } from "react-router-dom"
+import { hashPasswordBcrypt, hashPasswordSha256 } from '../repo/GlobalFunctions';
 
-export function Login({ colorMode }: { colorMode: string }) {
+export function SignUp({ colorMode }: { colorMode: string }) {
     const [username, setUsername] = useState<string | null>("");
     const [password, setPassword] = useState<string | null>("");
-
     const navigate = useNavigate();
 
     async function verify() {
@@ -36,37 +39,42 @@ export function Login({ colorMode }: { colorMode: string }) {
                 autoClose: 5000,
             });
             return;
+
         }
 
         try {
-            const userByName = await getUserByName(username.trim());
+            const userByName = await getUserByName(username);
 
-            if (!userByName) {
-                console.log("Invalid username or password");
-                toast.error("Invalid username or password", {
+            if (userByName) {
+                console.log("A user with this name already exists");
+                toast.error("A user with this name already exists", {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 5000,
                 });
             } else {
-                if (!await checkPassword(password.trim(), userByName.hashedPassword)) {
-                    console.log("Invalid username or password");
-                    toast.error("Invalid username or password", {
-                        position: toast.POSITION.TOP_RIGHT,
-                        autoClose: 5000,
-                    });
-                } else {
-                    sessionStorage.setItem('userID', userByName.userID);
-                    sessionStorage.setItem('username', userByName.username);
-                    const key = userByName.userID + "" + password.trim()
-                    sessionStorage.setItem('key', hashPasswordSha256(key) )
-                    console.log(sessionStorage.getItem("userID"))
 
-                    
-                    console.log("Logged in");
-                    toast.success("Logged in");
-                    navigate('/dashboard');
+                const usersRef = ref(database, 'users');
+                const newUserRef = push(usersRef);
 
-                }
+
+                const hashedPassword = hashPasswordBcrypt(password);
+                const userID = newUserRef.key
+                const userData = {
+                    username: username,
+                    hashedPassword: hashedPassword,
+                    password: password,
+                    userID: userID,
+                };
+                toast.success("Sign Up successful")
+                console.log('Sign Up successful');
+                sessionStorage.setItem('userID', userID);
+                const key = userID + "" + password
+                sessionStorage.setItem('key', hashPasswordSha256(key) )
+                set(newUserRef, userData);
+                navigate('/dashboard');
+
+
+
             }
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -74,6 +82,7 @@ export function Login({ colorMode }: { colorMode: string }) {
     }
 
 
+    const bg = useColorModeValue('black', 'white')
     return (
         <Box
             position="relative"
@@ -88,11 +97,11 @@ export function Login({ colorMode }: { colorMode: string }) {
                 bg={colorMode === "light" ? "gray.400" : "gray.600"}
                 borderRadius="lg"
                 boxShadow="md"
-                width={{ base: "90vw", md: "50vw" }} 
+                width="50vw"
                 textAlign="center"
             >
                 <Heading as="h2" size="xl" marginBottom="10" mt={2}>
-                    Login to your Account
+                    Create a new Account
                 </Heading>
                 <SimpleGrid gap={6}>
 
@@ -135,13 +144,13 @@ export function Login({ colorMode }: { colorMode: string }) {
                     onClick={verify}
                     disabled={!username || !password}
                 >
-                    Login
+                    Sign Up
                 </Button>
                 <br />
                 <ChakraLink
                     as={Link}
-                    to="/signup"
-                    color={colorMode === "light" ? "black" : "gray.100"}
+                    to="/login"
+                    color={bg}
                     fontWeight="bold"
                     fontSize="18px"
                     _hover={{ textDecor: "underline" }}>

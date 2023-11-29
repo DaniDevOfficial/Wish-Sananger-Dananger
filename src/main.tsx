@@ -1,14 +1,20 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
-import { BrowserRouter } from 'react-router-dom'
+import { createRoot } from "react-dom/client";
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <BrowserRouter>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  </BrowserRouter>
-  ,
-)
+import App from "./App";
+import { inputTheme } from "./themes/Input";
+
+const theme = extendTheme({
+  components: {
+    Input: inputTheme,
+  }
+});
+
+const container = document.getElementById("root");
+const root = createRoot(container!);
+root.render(
+  
+  <ChakraProvider theme={theme}>
+    <App />
+  </ChakraProvider>
+);
