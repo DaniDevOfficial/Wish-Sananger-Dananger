@@ -9,6 +9,7 @@ import { SignUp } from "./SignUp";
 import { Dashboard } from "./Dashboard";
 import Testing from "./testing";
 import { Account } from "./Account";
+import { Legal } from "./Legal";
 export function RouterWrapper() {
     const { toggleColorMode, colorMode } = useColorMode();
 
@@ -20,7 +21,7 @@ export function RouterWrapper() {
                     <Route path="/login" element={<Login colorMode={colorMode} />} />
                     <Route path="/signup" element={<SignUp colorMode={colorMode} />} />
                     <Route path="/dashboard" element={<Dashboard colorMode={colorMode}/>} />
-                    <Route path="/testing" element={<Testing />} />
+                    <Route path="/Legal" element={<Legal />} />
                     <Route path="/account" element={<Account colorMode={colorMode} />} />
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes >

@@ -156,6 +156,8 @@ export function SignUp({ colorMode }: { colorMode: string }) {
                     _hover={{ textDecor: "underline" }}>
                     <Text as="span">Or</Text> Sign Up
                 </ChakraLink>
+                <br />
+                <Link to={"/Legal"}>Legal</Link>
             </Box>
         </Box>
     );
