@@ -62,7 +62,6 @@ export function SignUp({ colorMode }: { colorMode: string }) {
                 const userData = {
                     username: username,
                     hashedPassword: hashedPassword,
-                    password: password,
                     userID: userID,
                 };
                 toast.success("Sign Up successful")
