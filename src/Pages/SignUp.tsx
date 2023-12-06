@@ -67,6 +67,7 @@ export function SignUp({ colorMode }: { colorMode: string }) {
                 toast.success("Sign Up successful")
                 console.log('Sign Up successful');
                 sessionStorage.setItem('userID', userID);
+                sessionStorage.setItem('username', username);
                 const key = userID + "" + password
                 sessionStorage.setItem('key', hashPasswordSha256(key) )
                 set(newUserRef, userData);
